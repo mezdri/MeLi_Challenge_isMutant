@@ -18,10 +18,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from .MutantTest import Mutant
+    from MutantTest import Mutant
     app.register_blueprint(Mutant.bp)
 
-    from .MutantTest import Model
+    from MutantTest import Model
     Model.init_app(app)
 
     return app
