@@ -1,40 +1,26 @@
-import sqlite3
-
-import click
-from flask import current_app, g
-from flask.cli import with_appcontext
+from main import db, ma
+import datetime
 
 
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
-    return g.db
+class MutantTests(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.TIMESTAMP, default=datetime.datetime.utcnow())
+    dna = db.Column(db.TEXT)
+    dna_token = db.Column(db.TEXT)
+    is_mutant = db.Column(db.INTEGER)
+
+    def __init__(self, dna, dna_token, is_mutant):
+        self.dna = dna
+        self.dna_token = dna_token
+        self.is_mutant = is_mutant
 
 
-def close_db(e=None):
-    db = g.pop('db', None)
-    if db is not None:
-        db.close()
+class MutantTestSchema(ma.Schema):
+    class Meta:
+        fields = ('dna', 'dna_token', 'is_mutant')
 
 
-def init_db():
-    db = get_db()
+mutantSchema = MutantTestSchema()
+mutantsSchema = MutantTestSchema(many=True)
 
-    with current_app.open_resource('MutantTest/dbMutant.sql') as f:
-        db.executescript(f.read().decode('utf8'))
-
-
-@click.command('init-db')
-@with_appcontext
-def init_db_command():
-    init_db()
-    click.echo('Initialized the database.')
-
-
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+db.create_all()
