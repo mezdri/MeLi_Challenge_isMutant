@@ -1,6 +1,11 @@
 from app import create_app
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
-app, db, ma = create_app()
+app = create_app()
+
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
 
 from MutantTest import Model
 

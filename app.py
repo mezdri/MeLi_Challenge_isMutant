@@ -1,7 +1,6 @@
 import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
+
 
 
 
@@ -22,12 +21,9 @@ def create_app(test_config=None):
     else:
         app.config.from_mapping(test_config)
 
-    db = SQLAlchemy(app)
-    ma = Marshmallow(app)
-
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
 
-    return app, db, ma
+    return app
