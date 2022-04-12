@@ -21,7 +21,6 @@ class MutantTest(unittest.TestCase):
         db.drop_all()
         self.app = None
         self.client = None
-        print('Take down tests')
 
     def test_mutantTest_human(self):
         dna_test = ["CCAGTG", "CCAGGC", "TAAGCA", "CACTGC", "CCTCTT", "TACTGC"]
@@ -37,6 +36,10 @@ class MutantTest(unittest.TestCase):
         self.chargeData()
         response = self.client.post('/stats/', json={})
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json['count_mutant_dna'], 1)
+        self.assertEqual(response.json['count_human_dna'], 1)
+        ratio = int(response.json['count_mutant_dna']) / int(response.json['count_human_dna'])
+        self.assertEqual(response.json['ratio'], ratio)
 
     def chargeData(self):
         dna_test = [(["CCAGTG", "CCAGGC", "TAAGCA", "CACTGC", "CCTCTT", "TACTGC"], 0), (["ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"],1)]
