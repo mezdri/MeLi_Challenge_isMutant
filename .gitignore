@@ -40,7 +40,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit tests / coverage reports
 htmlcov/
 .tox/
 .nox/
@@ -130,3 +130,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#coverage report
+.DS_Store
+dbtest.sqlite3
+tests/dbtest.sqlite3
